@@ -47,6 +47,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Establish keep-alive connection
   establishConnection();
 
+  // Check connection and display status
+  await checkConnectionStatus();
+  setInterval(checkConnectionStatus, 10000); // Check every 10 seconds
+
+  // Display current page info
+  await displayCurrentPageInfo();
+
   // Load saved state
   await loadState();
 
@@ -727,6 +734,43 @@ function openNote(noteId) {
   // TODO: Implement note viewer
   console.log('Opening note:', noteId);
   showToast('Note viewer coming soon!', 'info');
+}
+
+// ==================== Connection Status ====================
+async function checkConnectionStatus() {
+  try {
+    const response = await chrome.runtime.sendMessage({ type: 'PING' });
+    console.log('Connection status:', response?.status);
+  } catch (error) {
+    console.error('Connection check failed:', error);
+  }
+}
+
+// ==================== Display Current Page Info ====================
+async function displayCurrentPageInfo() {
+  try {
+    const response = await chrome.runtime.sendMessage({ type: 'GET_CURRENT_TAB' });
+
+    if (response && response.success && response.tab) {
+      const tab = response.tab;
+      console.log('Current page:', tab.url);
+
+      // Update page info in UI if needed
+      // You can add a section to show current page info in the dashboard
+      const pageUrl = new URL(tab.url);
+      const domain = pageUrl.hostname;
+
+      // Store current tab info for later use
+      window.currentTab = {
+        id: tab.id,
+        url: tab.url,
+        title: tab.title,
+        domain: domain
+      };
+    }
+  } catch (error) {
+    console.error('Error getting current page info:', error);
+  }
 }
 
 // ==================== API Status ====================

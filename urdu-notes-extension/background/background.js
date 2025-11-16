@@ -11,6 +11,11 @@ import { aiAssistant } from '../components/ai-assistant.js';
 // Side panel state management
 let sidePanelOpen = false;
 
+// CRITICAL: Enable side panel for ALL tabs by default
+chrome.sidePanel
+  .setPanelBehavior({ openPanelOnActionClick: true })
+  .catch((error) => console.error('Panel behavior error:', error));
+
 // Initialize on installation
 chrome.runtime.onInstalled.addListener(async (details) => {
   console.log('IlmAI Extension installed', details);
@@ -21,20 +26,41 @@ chrome.runtime.onInstalled.addListener(async (details) => {
 
   // Auto-open side panel on install/update
   if (details.reason === 'install' || details.reason === 'update') {
-    // Set side panel to be available
-    await chrome.sidePanel.setOptions({
-      enabled: true
-    });
-
-    // Open side panel in current window
     try {
+      // Enable side panel globally (no URL restrictions)
+      await chrome.sidePanel.setPanelBehavior({
+        openPanelOnActionClick: true
+      });
+
+      // Get all existing tabs and enable side panel for each
+      const tabs = await chrome.tabs.query({});
+      for (const tab of tabs) {
+        try {
+          await chrome.sidePanel.setOptions({
+            tabId: tab.id,
+            enabled: true
+          });
+        } catch (err) {
+          console.log('Could not enable for tab:', tab.id, err.message);
+        }
+      }
+
+      // Open side panel in current window
       const windows = await chrome.windows.getAll({ populate: true });
       if (windows.length > 0) {
         const activeWindow = windows.find(w => w.focused) || windows[0];
         await chrome.sidePanel.open({ windowId: activeWindow.id });
       }
+
+      // Show welcome notification
+      chrome.notifications.create({
+        type: 'basic',
+        iconUrl: '/assets/icons/icon128.png',
+        title: 'Welcome to IlmAI!',
+        message: 'Click the IlmAI icon to open your AI assistant on any page!'
+      });
     } catch (error) {
-      console.error('Error opening side panel:', error);
+      console.error('Error setting up side panel:', error);
     }
   }
 
@@ -190,6 +216,22 @@ async function handleMessage(message, sender, sendResponse) {
           sendResponse({ success: false, error: error.message });
         }
         break;
+
+      case 'PING':
+        // Keep-alive ping from side panel
+        sendResponse({ success: true, status: 'alive' });
+        break;
+
+      case 'GET_CURRENT_TAB':
+        // Get current tab information
+        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+          if (tabs && tabs.length > 0) {
+            sendResponse({ success: true, tab: tabs[0] });
+          } else {
+            sendResponse({ success: false, error: 'No active tab' });
+          }
+        });
+        return true; // Keep channel open for async response
 
       default:
         sendResponse({ success: false, error: 'Unknown message type' });
@@ -497,4 +539,61 @@ chrome.runtime.onConnect.addListener((port) => {
   }
 });
 
-console.log('IlmAI Background Service Worker loaded');
+// Enable side panel when new tab is created
+chrome.tabs.onCreated.addListener(async (tab) => {
+  try {
+    await chrome.sidePanel.setOptions({
+      tabId: tab.id,
+      enabled: true
+    });
+    console.log('Side panel enabled for new tab:', tab.id);
+  } catch (error) {
+    console.error('Error enabling side panel for new tab:', error);
+  }
+});
+
+// Enable side panel when tab is updated (navigated to new URL)
+chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
+  if (changeInfo.status === 'complete') {
+    try {
+      await chrome.sidePanel.setOptions({
+        tabId: tabId,
+        enabled: true
+      });
+      console.log('Side panel enabled for updated tab:', tabId, tab.url);
+    } catch (error) {
+      console.error('Error enabling side panel for updated tab:', error);
+    }
+  }
+});
+
+// Keep side panel enabled when switching tabs
+chrome.tabs.onActivated.addListener(async (activeInfo) => {
+  try {
+    await chrome.sidePanel.setOptions({
+      tabId: activeInfo.tabId,
+      enabled: true
+    });
+    console.log('Side panel enabled for activated tab:', activeInfo.tabId);
+  } catch (error) {
+    console.error('Error enabling side panel on tab switch:', error);
+  }
+});
+
+// Ensure side panel is available on all windows
+chrome.windows.onCreated.addListener(async (window) => {
+  try {
+    const tabs = await chrome.tabs.query({ windowId: window.id });
+    for (const tab of tabs) {
+      await chrome.sidePanel.setOptions({
+        tabId: tab.id,
+        enabled: true
+      });
+    }
+    console.log('Side panel enabled for new window:', window.id);
+  } catch (error) {
+    console.error('Error enabling side panel for new window:', error);
+  }
+});
+
+console.log('IlmAI Background Service Worker loaded - Side Panel Available on ALL Pages');
