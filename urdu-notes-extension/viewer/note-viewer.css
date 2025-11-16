@@ -1,0 +1,236 @@
+/**
+ * Note Viewer Styles
+ * Beautiful split-view interface for video playback and transcript
+ */
+
+/* Import design system */
+@import url('../styles/design-system.css');
+
+/* Global Styles */
+body {
+  margin: 0;
+  font-family: var(--font-family-primary, 'Inter', sans-serif);
+  overflow: hidden;
+}
+
+/* Header Styles */
+.btn-icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: var(--color-text-primary);
+}
+
+.btn-icon:hover {
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--color-border-light);
+  background: white;
+  color: var(--color-text-primary);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-secondary:hover {
+  background: var(--color-surface-light);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.dark .btn-secondary {
+  background: var(--color-slate-800);
+  border-color: var(--color-border-dark);
+  color: var(--color-text-primary-dark);
+}
+
+.dark .btn-secondary:hover {
+  background: var(--color-slate-700);
+}
+
+/* Video Panel Styles */
+.video-panel {
+  border-right: 1px solid var(--color-border-light);
+}
+
+.dark .video-panel {
+  border-color: var(--color-border-dark);
+}
+
+/* Video Controls */
+.video-controls button {
+  transition: all 0.2s;
+}
+
+.video-controls button:hover {
+  transform: scale(1.1);
+}
+
+/* Bookmark Item */
+.bookmark-item {
+  transition: all 0.2s;
+}
+
+.bookmark-item:hover {
+  transform: translateX(4px);
+}
+
+/* Transcript Segment */
+.transcript-segment {
+  padding: 16px;
+  border-radius: 12px;
+  transition: all 0.3s;
+}
+
+.transcript-segment:hover {
+  background: var(--color-surface-light);
+}
+
+.dark .transcript-segment:hover {
+  background: var(--color-slate-800);
+}
+
+/* Highlighted Transcript */
+.transcript-segment.highlighted {
+  background: #FEF3C7;
+  border-left: 4px solid #F59E0B;
+  padding-left: 12px;
+  margin-left: -16px;
+}
+
+.dark .transcript-segment.highlighted {
+  background: rgba(245, 158, 11, 0.1);
+}
+
+/* Button Styles */
+.btn-sm {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-sm:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Tabs */
+.tab-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.tab-btn:hover {
+  background: var(--color-surface-light);
+}
+
+.dark .tab-btn:hover {
+  background: var(--color-slate-700);
+}
+
+/* Prose Styles */
+.prose {
+  max-width: none;
+}
+
+.prose p {
+  margin-bottom: 0;
+}
+
+.dark .prose-invert p {
+  color: var(--color-text-primary-dark);
+}
+
+/* RTL Support */
+[dir="rtl"] {
+  text-align: right;
+  font-family: var(--font-family-urdu, 'Noto Nastaliq Urdu', serif);
+}
+
+/* Custom Scrollbar */
+.notes-panel::-webkit-scrollbar {
+  width: 8px;
+}
+
+.notes-panel::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.notes-panel::-webkit-scrollbar-thumb {
+  background: var(--color-slate-300);
+  border-radius: 4px;
+}
+
+.notes-panel::-webkit-scrollbar-thumb:hover {
+  background: var(--color-slate-400);
+}
+
+.dark .notes-panel::-webkit-scrollbar-thumb {
+  background: var(--color-slate-600);
+}
+
+.dark .notes-panel::-webkit-scrollbar-thumb:hover {
+  background: var(--color-slate-500);
+}
+
+/* Animations */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.transcript-segment {
+  animation: fade-in 0.3s ease-out;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  main {
+    flex-direction: column;
+  }
+
+  .video-panel,
+  .notes-panel {
+    width: 100% !important;
+  }
+
+  .video-panel {
+    height: 50vh;
+  }
+}
+
+@media (max-width: 640px) {
+  .btn-secondary span {
+    display: none;
+  }
+}

@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings - IlmAI</title>
+  <link rel="stylesheet" href="../styles/design-system.css">
+  <link rel="stylesheet" href="settings.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-slate-50 dark:bg-slate-900">
+  <!-- Header -->
+  <header class="sticky top-0 z-50 bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 shadow-sm">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-4">
+        <div class="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center shadow-lg">
+          <i data-lucide="settings" size="20" class="text-white"></i>
+        </div>
+        <div>
+          <h1 class="text-2xl font-bold text-slate-900 dark:text-white">Settings</h1>
+          <p class="text-sm text-slate-600 dark:text-slate-400">Customize your IlmAI experience</p>
+        </div>
+      </div>
+      <button id="saveBtn" class="px-6 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200">
+        <i data-lucide="save" size="16" class="inline mr-2"></i>
+        Save Changes
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-6xl mx-auto px-6 py-8">
+    <!-- Appearance Section -->
+    <section class="settings-section mb-6">
+      <button class="section-header" data-section="appearance">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
+            <i data-lucide="palette" size="20" class="text-blue-600 dark:text-blue-400"></i>
+          </div>
+          <div class="text-left">
+            <h2 class="text-lg font-bold text-slate-900 dark:text-white">Appearance</h2>
+            <p class="text-sm text-slate-600 dark:text-slate-400">Customize colors, fonts, and theme</p>
+          </div>
+        </div>
+        <i data-lucide="chevron-down" size="20" class="chevron transition-transform"></i>
+      </button>
+
+      <div class="section-content">
+        <div class="settings-grid">
+          <!-- Theme -->
+          <div class="setting-item">
+            <label class="setting-label">
+              <i data-lucide="sun-moon" size="16"></i>
+              Theme
+            </label>
+            <div class="theme-options">
+              <button class="theme-btn active" data-theme="light">
+                <i data-lucide="sun" size="16"></i>
+                Light
+              </button>
+              <button class="theme-btn" data-theme="dark">
+                <i data-lucide="moon" size="16"></i>
+                Dark
+              </button>
+              <button class="theme-btn" data-theme="auto">
+                <i data-lucide="monitor" size="16"></i>
+                Auto
+              </button>
+            </div>
+          </div>
+
+          <!-- Accent Color -->
+          <div class="setting-item">
+            <label class="setting-label">
+              <i data-lucide="droplet" size="16"></i>
+              Accent Color
+            </label>
+            <div class="color-picker-grid">
+              <button class="color-swatch active" style="background: #2563EB" data-color="blue"></button>
+              <button class="color-swatch" style="background: #7C3AED" data-color="purple"></button>
+              <button class="color-swatch" style="background: #10B981" data-color="green"></button>
+              <button class="color-swatch" style="background: #F59E0B" data-color="amber"></button>
+              <button class="color-swatch" style="background: #EF4444" data-color="red"></button>
+              <button class="color-swatch" style="background: #06B6D4" data-color="cyan"></button>
+            </div>
+          </div>
+
+          <!-- Font Size -->
+          <div class="setting-item">
+            <label class="setting-label">
+              <i data-lucide="type" size="16"></i>
+              Font Size
+            </label>
+            <div class="slider-container">
+              <input type="range" min="12" max="20" value="16" step="1" id="fontSizeSlider" class="slider">
+              <div class="slider-labels">
+                <span>12px</span>
+                <span id="fontSizeValue" class="font-semibold text-blue-600">16px</span>
+                <span>20px</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Density -->
+          <div class="setting-item">
+            <label class="setting-label">
+              <i data-lucide="layout" size="16"></i>
+              Density
+            </label>
+            <div class="radio-group">
+              <label class="radio-label">
+                <input type="radio" name="density" value="compact">
+                <span>Compact</span>
+              </label>
+              <label class="radio-label active">
+                <input type="radio" name="density" value="comfortable" checked>
+                <span>Comfortable</span>
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="density" value="spacious">
+                <span>Spacious</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- API Keys Section -->
+    <section class="settings-section mb-6">
+      <button class="section-header" data-section="api-keys">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center">
+            <i data-lucide="key" size="20" class="text-purple-600 dark:text-purple-400"></i>
+          </div>
+          <div class="text-left">
+            <h2 class="text-lg font-bold text-slate-900 dark:text-white">API Keys</h2>
+            <p class="text-sm text-slate-600 dark:text-slate-400">Manage your Gemini API keys</p>
+          </div>
+        </div>
+        <i data-lucide="chevron-down" size="20" class="chevron transition-transform"></i>
+      </button>
+
+      <div class="section-content">
+        <div class="api-keys-list space-y-3">
+          <!-- API Key Card 1 -->
+          <div class="api-key-card">
+            <div class="flex items-start gap-4">
+              <div class="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
+                <i data-lucide="check-circle" size="24" class="text-green-600 dark:text-green-400"></i>
+              </div>
+              <div class="flex-1">
+                <div class="flex items-center justify-between mb-2">
+                  <h3 class="font-semibold text-slate-900 dark:text-white">Primary Key</h3>
+                  <span class="px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-xs font-semibold rounded-full">
+                    Active
+                  </span>
+                </div>
+                <p class="text-sm text-slate-600 dark:text-slate-400 mb-2">Model: gemini-pro</p>
+                <div class="flex items-center gap-4 mb-3">
+                  <div class="flex-1">
+                    <div class="flex items-center justify-between text-xs text-slate-600 dark:text-slate-400 mb-1">
+                      <span>Usage</span>
+                      <span class="font-semibold">245 / 1000 requests</span>
+                    </div>
+                    <div class="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                      <div class="h-full bg-gradient-to-r from-green-500 to-green-600 rounded-full" style="width: 24.5%"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="flex gap-2">
+                  <button class="btn-sm bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600">
+                    <i data-lucide="test-tube" size="14"></i>
+                    Test
+                  </button>
+                  <button class="btn-sm bg-blue-100 dark:bg-blue-900/30 hover:bg-blue-200 dark:hover:bg-blue-900/50 text-blue-700 dark:text-blue-400">
+                    <i data-lucide="edit" size="14"></i>
+                    Edit
+                  </button>
+                  <button class="btn-sm bg-red-100 dark:bg-red-900/30 hover:bg-red-200 dark:hover:bg-red-900/50 text-red-700 dark:text-red-400">
+                    <i data-lucide="trash-2" size="14"></i>
+                    Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- API Key Card 2 -->
+          <div class="api-key-card">
+            <div class="flex items-start gap-4">
+              <div class="w-12 h-12 bg-amber-100 dark:bg-amber-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
+                <i data-lucide="clock" size="24" class="text-amber-600 dark:text-amber-400"></i>
+              </div>
+              <div class="flex-1">
+                <div class="flex items-center justify-between mb-2">
+                  <h3 class="font-semibold text-slate-900 dark:text-white">Backup Key 1</h3>
+                  <span class="px-3 py-1 bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 text-xs font-semibold rounded-full">
+                    Standby
+                  </span>
+                </div>
+                <p class="text-sm text-slate-600 dark:text-slate-400 mb-2">Model: gemini-flash</p>
+                <div class="flex items-center gap-4 mb-3">
+                  <div class="flex-1">
+                    <div class="flex items-center justify-between text-xs text-slate-600 dark:text-slate-400 mb-1">
+                      <span>Usage</span>
+                      <span class="font-semibold">0 / 1000 requests</span>
+                    </div>
+                    <div class="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                      <div class="h-full bg-gradient-to-r from-amber-500 to-amber-600 rounded-full" style="width: 0%"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="flex gap-2">
+                  <button class="btn-sm bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600">
+                    <i data-lucide="test-tube" size="14"></i>
+                    Test
+                  </button>
+                  <button class="btn-sm bg-blue-100 dark:bg-blue-900/30 hover:bg-blue-200 dark:hover:bg-blue-900/50 text-blue-700 dark:text-blue-400">
+                    <i data-lucide="edit" size="14"></i>
+                    Edit
+                  </button>
+                  <button class="btn-sm bg-red-100 dark:bg-red-900/30 hover:bg-red-200 dark:hover:bg-red-900/50 text-red-700 dark:text-red-400">
+                    <i data-lucide="trash-2" size="14"></i>
+                    Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- API Key Card 3 - Error State -->
+          <div class="api-key-card border-red-200 dark:border-red-900/30">
+            <div class="flex items-start gap-4">
+              <div class="w-12 h-12 bg-red-100 dark:bg-red-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
+                <i data-lucide="x-circle" size="24" class="text-red-600 dark:text-red-400"></i>
+              </div>
+              <div class="flex-1">
+                <div class="flex items-center justify-between mb-2">
+                  <h3 class="font-semibold text-slate-900 dark:text-white">Backup Key 2</h3>
+                  <span class="px-3 py-1 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 text-xs font-semibold rounded-full">
+                    Inactive
+                  </span>
+                </div>
+                <div class="flex items-center gap-2 text-sm text-red-600 dark:text-red-400 mb-3">
+                  <i data-lucide="alert-triangle" size="14"></i>
+                  <span>Error: Invalid API key</span>
+                </div>
+                <div class="flex gap-2">
+                  <button class="btn-sm bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600">
+                    <i data-lucide="test-tube" size="14"></i>
+                    Test
+                  </button>
+                  <button class="btn-sm bg-blue-100 dark:bg-blue-900/30 hover:bg-blue-200 dark:hover:bg-blue-900/50 text-blue-700 dark:text-blue-400">
+                    <i data-lucide="edit" size="14"></i>
+                    Edit
+                  </button>
+                  <button class="btn-sm bg-red-100 dark:bg-red-900/30 hover:bg-red-200 dark:hover:bg-red-900/50 text-red-700 dark:text-red-400">
+                    <i data-lucide="trash-2" size="14"></i>
+                    Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button class="mt-4 w-full py-3 border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-lg text-slate-600 dark:text-slate-400 hover:border-blue-500 hover:text-blue-600 dark:hover:text-blue-400 transition-all font-semibold">
+          <i data-lucide="plus" size="16" class="inline mr-2"></i>
+          Add New API Key
+        </button>
+      </div>
+    </section>
+
+    <!-- Transcription Section -->
+    <section class="settings-section mb-6">
+      <button class="section-header" data-section="transcription">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center">
+            <i data-lucide="mic" size="20" class="text-green-600 dark:text-green-400"></i>
+          </div>
+          <div class="text-left">
+            <h2 class="text-lg font-bold text-slate-900 dark:text-white">Transcription</h2>
+            <p class="text-sm text-slate-600 dark:text-slate-400">Configure audio transcription settings</p>
+          </div>
+        </div>
+        <i data-lucide="chevron-down" size="20" class="chevron transition-transform"></i>
+      </button>
+
+      <div class="section-content hidden">
+        <div class="settings-grid">
+          <!-- Quality -->
+          <div class="setting-item">
+            <label class="setting-label">
+              <i data-lucide="zap" size="16"></i>
+              Quality
+            </label>
+            <div class="radio-group">
+              <label class="radio-label">
+                <input type="radio" name="quality" value="fast">
+                <span>Fast</span>
+              </label>
+              <label class="radio-label active">
+                <input type="radio" name="quality" value="balanced" checked>
+                <span>Balanced</span>
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="quality" value="accurate">
+                <span>Accurate</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Auto-detect Language -->
+          <div class="setting-item">
+            <label class="setting-label">
+              <i data-lucide="languages" size="16"></i>
+              Auto-detect Language
+            </label>
+            <label class="toggle-switch">
+              <input type="checkbox" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <!-- Speaker Diarization -->
+          <div class="setting-item">
+            <label class="setting-label">
+              <i data-lucide="users" size="16"></i>
+              Speaker Diarization
+            </label>
+            <label class="toggle-switch">
+              <input type="checkbox" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <!-- Confidence Threshold -->
+          <div class="setting-item">
+            <label class="setting-label">
+              <i data-lucide="percent" size="16"></i>
+              Confidence Threshold
+            </label>
+            <div class="slider-container">
+              <input type="range" min="50" max="100" value="85" step="5" id="confidenceSlider" class="slider">
+              <div class="slider-labels">
+                <span>50%</span>
+                <span id="confidenceValue" class="font-semibold text-green-600">85%</span>
+                <span>100%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Organization Section -->
+    <section class="settings-section mb-6">
+      <button class="section-header" data-section="organization">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 bg-amber-100 dark:bg-amber-900/30 rounded-lg flex items-center justify-center">
+            <i data-lucide="folder-tree" size="20" class="text-amber-600 dark:text-amber-400"></i>
+          </div>
+          <div class="text-left">
+            <h2 class="text-lg font-bold text-slate-900 dark:text-white">Organization</h2>
+            <p class="text-sm text-slate-600 dark:text-slate-400">Auto-categorization and tagging</p>
+          </div>
+        </div>
+        <i data-lucide="chevron-down" size="20" class="chevron transition-transform"></i>
+      </button>
+
+      <div class="section-content hidden">
+        <div class="settings-grid">
+          <div class="setting-item">
+            <label class="setting-label">
+              <i data-lucide="tag" size="16"></i>
+              Auto-categorize
+            </label>
+            <label class="toggle-switch">
+              <input type="checkbox" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <div class="setting-item">
+            <label class="setting-label">
+              <i data-lucide="tags" size="16"></i>
+              Auto-tag
+            </label>
+            <label class="toggle-switch">
+              <input type="checkbox" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <div class="setting-item">
+            <label class="setting-label">
+              <i data-lucide="folder" size="16"></i>
+              Default Workspace
+            </label>
+            <select class="select-input">
+              <option>Islamic Studies</option>
+              <option>Urdu Literature</option>
+              <option>Science</option>
+              <option>History</option>
+            </select>
+          </div>
+
+          <div class="setting-item">
+            <label class="setting-label">
+              <i data-lucide="archive" size="16"></i>
+              Auto-archive after
+            </label>
+            <select class="select-input">
+              <option>Never</option>
+              <option selected>30 days</option>
+              <option>60 days</option>
+              <option>90 days</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Notifications Section -->
+    <section class="settings-section mb-6">
+      <button class="section-header" data-section="notifications">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 bg-red-100 dark:bg-red-900/30 rounded-lg flex items-center justify-center">
+            <i data-lucide="bell" size="20" class="text-red-600 dark:text-red-400"></i>
+          </div>
+          <div class="text-left">
+            <h2 class="text-lg font-bold text-slate-900 dark:text-white">Notifications</h2>
+            <p class="text-sm text-slate-600 dark:text-slate-400">Manage notification preferences</p>
+          </div>
+        </div>
+        <i data-lucide="chevron-down" size="20" class="chevron transition-transform"></i>
+      </button>
+
+      <div class="section-content hidden">
+        <div class="settings-grid">
+          <div class="setting-item">
+            <label class="setting-label">
+              <i data-lucide="check-circle" size="16"></i>
+              Transcription Complete
+            </label>
+            <label class="toggle-switch">
+              <input type="checkbox" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <div class="setting-item">
+            <label class="setting-label">
+              <i data-lucide="calendar-clock" size="16"></i>
+              Daily Review Reminder
+            </label>
+            <div class="flex items-center gap-2">
+              <label class="toggle-switch">
+                <input type="checkbox" checked>
+                <span class="toggle-slider"></span>
+              </label>
+              <select class="select-input w-32">
+                <option selected>9:00 AM</option>
+                <option>10:00 AM</option>
+                <option>11:00 AM</option>
+                <option>12:00 PM</option>
+                <option>1:00 PM</option>
+                <option>2:00 PM</option>
+                <option>3:00 PM</option>
+                <option>6:00 PM</option>
+                <option>8:00 PM</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="setting-item">
+            <label class="setting-label">
+              <i data-lucide="repeat" size="16"></i>
+              Spaced Repetition
+            </label>
+            <label class="toggle-switch">
+              <input type="checkbox" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <div class="setting-item">
+            <label class="setting-label">
+              <i data-lucide="alert-triangle" size="16"></i>
+              API Key Errors
+            </label>
+            <label class="toggle-switch">
+              <input type="checkbox" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Privacy & Security Section -->
+    <section class="settings-section mb-6">
+      <button class="section-header" data-section="privacy">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg flex items-center justify-center">
+            <i data-lucide="shield" size="20" class="text-indigo-600 dark:text-indigo-400"></i>
+          </div>
+          <div class="text-left">
+            <h2 class="text-lg font-bold text-slate-900 dark:text-white">Privacy & Security</h2>
+            <p class="text-sm text-slate-600 dark:text-slate-400">Data protection and encryption</p>
+          </div>
+        </div>
+        <i data-lucide="chevron-down" size="20" class="chevron transition-transform"></i>
+      </button>
+
+      <div class="section-content hidden">
+        <div class="settings-grid">
+          <div class="setting-item">
+            <label class="setting-label">
+              <i data-lucide="lock" size="16"></i>
+              Encrypt Local Storage
+            </label>
+            <label class="toggle-switch">
+              <input type="checkbox" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <div class="setting-item">
+            <label class="setting-label">
+              <i data-lucide="timer" size="16"></i>
+              Auto-lock
+            </label>
+            <div class="flex items-center gap-2">
+              <label class="toggle-switch">
+                <input type="checkbox" checked>
+                <span class="toggle-slider"></span>
+              </label>
+              <select class="select-input w-32">
+                <option>5 min</option>
+                <option>10 min</option>
+                <option selected>15 min</option>
+                <option>30 min</option>
+                <option>1 hour</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="setting-item">
+            <label class="setting-label">
+              <i data-lucide="trash" size="16"></i>
+              Clear Cache on Exit
+            </label>
+            <label class="toggle-switch">
+              <input type="checkbox">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <div class="setting-item">
+            <label class="setting-label">
+              <i data-lucide="bar-chart" size="16"></i>
+              Anonymous Analytics
+            </label>
+            <label class="toggle-switch">
+              <input type="checkbox" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Data & Sync Section -->
+    <section class="settings-section mb-6">
+      <button class="section-header" data-section="data">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 bg-cyan-100 dark:bg-cyan-900/30 rounded-lg flex items-center justify-center">
+            <i data-lucide="database" size="20" class="text-cyan-600 dark:text-cyan-400"></i>
+          </div>
+          <div class="text-left">
+            <h2 class="text-lg font-bold text-slate-900 dark:text-white">Data & Sync</h2>
+            <p class="text-sm text-slate-600 dark:text-slate-400">Backup and synchronization</p>
+          </div>
+        </div>
+        <i data-lucide="chevron-down" size="20" class="chevron transition-transform"></i>
+      </button>
+
+      <div class="section-content hidden">
+        <div class="settings-grid">
+          <div class="setting-item">
+            <label class="setting-label">
+              <i data-lucide="cloud" size="16"></i>
+              Auto-sync
+            </label>
+            <div class="flex items-center gap-2">
+              <label class="toggle-switch">
+                <input type="checkbox" checked>
+                <span class="toggle-slider"></span>
+              </label>
+              <select class="select-input w-40">
+                <option selected>Google Drive</option>
+                <option>Dropbox</option>
+                <option>OneDrive</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="setting-item">
+            <label class="setting-label">
+              <i data-lucide="refresh-cw" size="16"></i>
+              Sync Frequency
+            </label>
+            <select class="select-input">
+              <option>Every 15 minutes</option>
+              <option>Every 30 minutes</option>
+              <option selected>Every hour</option>
+              <option>Every 6 hours</option>
+              <option>Daily</option>
+            </select>
+          </div>
+
+          <div class="setting-item col-span-2">
+            <label class="setting-label">
+              <i data-lucide="hard-drive" size="16"></i>
+              Storage Used
+            </label>
+            <div class="storage-info">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm text-slate-600 dark:text-slate-400">245 MB / 1 GB</span>
+                <span class="text-sm font-semibold text-blue-600">24.5%</span>
+              </div>
+              <div class="w-full h-3 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                <div class="h-full bg-gradient-to-r from-blue-500 to-blue-600 rounded-full" style="width: 24.5%"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="setting-item col-span-2">
+            <div class="flex gap-3">
+              <button class="flex-1 py-2.5 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded-lg font-semibold hover:bg-blue-200 dark:hover:bg-blue-900/50 transition-all">
+                <i data-lucide="download" size="16" class="inline mr-2"></i>
+                Export All Data
+              </button>
+              <button class="flex-1 py-2.5 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400 rounded-lg font-semibold hover:bg-purple-200 dark:hover:bg-purple-900/50 transition-all">
+                <i data-lucide="upload" size="16" class="inline mr-2"></i>
+                Import Data
+              </button>
+              <button class="flex-1 py-2.5 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 rounded-lg font-semibold hover:bg-red-200 dark:hover:bg-red-900/50 transition-all">
+                <i data-lucide="trash-2" size="16" class="inline mr-2"></i>
+                Clear All
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="settings-section mb-6">
+      <button class="section-header" data-section="about">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 bg-slate-200 dark:bg-slate-700 rounded-lg flex items-center justify-center">
+            <i data-lucide="info" size="20" class="text-slate-600 dark:text-slate-400"></i>
+          </div>
+          <div class="text-left">
+            <h2 class="text-lg font-bold text-slate-900 dark:text-white">About</h2>
+            <p class="text-sm text-slate-600 dark:text-slate-400">Version and information</p>
+          </div>
+        </div>
+        <i data-lucide="chevron-down" size="20" class="chevron transition-transform"></i>
+      </button>
+
+      <div class="section-content hidden">
+        <div class="space-y-4">
+          <div class="flex items-center justify-between p-4 bg-slate-100 dark:bg-slate-800 rounded-lg">
+            <span class="text-sm text-slate-600 dark:text-slate-400">Version</span>
+            <span class="font-semibold text-slate-900 dark:text-white">1.0.0</span>
+          </div>
+
+          <div class="flex flex-col gap-2">
+            <button class="w-full py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 rounded-lg font-semibold hover:bg-slate-50 dark:hover:bg-slate-700 transition-all text-left px-4">
+              <i data-lucide="refresh-cw" size="16" class="inline mr-2"></i>
+              Check for Updates
+            </button>
+            <button class="w-full py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 rounded-lg font-semibold hover:bg-slate-50 dark:hover:bg-slate-700 transition-all text-left px-4">
+              <i data-lucide="file-text" size="16" class="inline mr-2"></i>
+              View Changelog
+            </button>
+            <button class="w-full py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 rounded-lg font-semibold hover:bg-slate-50 dark:hover:bg-slate-700 transition-all text-left px-4">
+              <i data-lucide="shield-check" size="16" class="inline mr-2"></i>
+              Privacy Policy
+            </button>
+            <button class="w-full py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 rounded-lg font-semibold hover:bg-slate-50 dark:hover:bg-slate-700 transition-all text-left px-4">
+              <i data-lucide="scroll" size="16" class="inline mr-2"></i>
+              Terms of Service
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="settings.js"></script>
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
+</html>
