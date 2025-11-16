@@ -7,6 +7,149 @@ import { audioCapture } from './audio-capture.js';
 
 let isCapturing = false;
 let captureOverlay = null;
+let floatingIndicator = null;
+
+// Initialize floating indicator on page load
+function initializeFloatingIndicator() {
+  // Don't inject on restricted pages
+  if (window.location.href.startsWith('chrome://') ||
+      window.location.href.startsWith('edge://') ||
+      window.location.href.startsWith('chrome-extension://')) {
+    return;
+  }
+
+  createFloatingIndicator();
+}
+
+// Create floating indicator
+function createFloatingIndicator() {
+  // Remove existing indicator if any
+  if (floatingIndicator) {
+    floatingIndicator.remove();
+  }
+
+  floatingIndicator = document.createElement('div');
+  floatingIndicator.id = 'ilmai-floating-indicator';
+  floatingIndicator.innerHTML = `
+    <div class="ilmai-indicator-icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+        <path d="M2 17l10 5 10-5"></path>
+        <path d="M2 12l10 5 10-5"></path>
+      </svg>
+    </div>
+    <div class="ilmai-indicator-label">IlmAI</div>
+  `;
+
+  floatingIndicator.title = 'Toggle IlmAI Side Panel (Ctrl+Shift+I)';
+
+  document.body.appendChild(floatingIndicator);
+
+  // Add click listener
+  floatingIndicator.addEventListener('click', toggleSidePanel);
+
+  // Inject indicator styles
+  injectIndicatorStyles();
+}
+
+// Toggle side panel
+async function toggleSidePanel() {
+  try {
+    const response = await chrome.runtime.sendMessage({ type: 'TOGGLE_SIDEPANEL' });
+
+    if (response && response.success) {
+      // Add visual feedback
+      floatingIndicator.classList.add('ilmai-indicator-active');
+      setTimeout(() => {
+        floatingIndicator.classList.remove('ilmai-indicator-active');
+      }, 300);
+    }
+  } catch (error) {
+    console.error('Error toggling side panel:', error);
+  }
+}
+
+// Inject indicator styles
+function injectIndicatorStyles() {
+  if (document.getElementById('ilmai-indicator-styles')) return;
+
+  const style = document.createElement('style');
+  style.id = 'ilmai-indicator-styles';
+  style.textContent = `
+    #ilmai-floating-indicator {
+      position: fixed;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 999998;
+      cursor: pointer;
+      background: linear-gradient(135deg, #2563EB 0%, #1E40AF 100%);
+      color: white;
+      border-radius: 0 12px 12px 0;
+      padding: 12px 8px;
+      box-shadow: 4px 0 16px rgba(37, 99, 235, 0.3);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      user-select: none;
+    }
+
+    #ilmai-floating-indicator:hover {
+      padding-right: 16px;
+      box-shadow: 6px 0 24px rgba(37, 99, 235, 0.4);
+      background: linear-gradient(135deg, #3b82f6 0%, #2563EB 100%);
+    }
+
+    #ilmai-floating-indicator:active,
+    #ilmai-floating-indicator.ilmai-indicator-active {
+      transform: translateY(-50%) scale(0.95);
+    }
+
+    .ilmai-indicator-icon {
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 8px;
+      backdrop-filter: blur(10px);
+    }
+
+    .ilmai-indicator-icon svg {
+      width: 20px;
+      height: 20px;
+      stroke: white;
+    }
+
+    .ilmai-indicator-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      opacity: 0.9;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      #ilmai-floating-indicator {
+        transition: none;
+      }
+    }
+
+    /* Hide on very small screens */
+    @media (max-width: 640px) {
+      #ilmai-floating-indicator {
+        display: none;
+      }
+    }
+  `;
+
+  document.head.appendChild(style);
+}
 
 // Listen for messages from background script
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
@@ -20,7 +163,12 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     // Focus search in sidepanel (handled by sidepanel)
   } else if (message.type === 'OPEN_COMMAND_PALETTE') {
     openCommandPalette();
+  } else if (message.type === 'INJECT_FLOATING_INDICATOR') {
+    initializeFloatingIndicator();
+    sendResponse({ success: true });
   }
+
+  return true;
 });
 
 // Start video capture
@@ -515,6 +663,13 @@ async function getDefaultNotebookId() {
 function openCommandPalette() {
   // Implementation for command palette
   console.log('Opening command palette...');
+}
+
+// Initialize on page load
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initializeFloatingIndicator);
+} else {
+  initializeFloatingIndicator();
 }
 
 console.log('IlmAI content script loaded');

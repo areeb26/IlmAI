@@ -8,6 +8,9 @@ import { storageManager } from '../components/storage-manager.js';
 import { transcriptionEngine } from '../components/transcription-engine.js';
 import { aiAssistant } from '../components/ai-assistant.js';
 
+// Side panel state management
+let sidePanelOpen = false;
+
 // Initialize on installation
 chrome.runtime.onInstalled.addListener(async (details) => {
   console.log('IlmAI Extension installed', details);
@@ -15,6 +18,25 @@ chrome.runtime.onInstalled.addListener(async (details) => {
   // Initialize storage
   await storageManager.initialize();
   await apiKeyManager.initialize();
+
+  // Auto-open side panel on install/update
+  if (details.reason === 'install' || details.reason === 'update') {
+    // Set side panel to be available
+    await chrome.sidePanel.setOptions({
+      enabled: true
+    });
+
+    // Open side panel in current window
+    try {
+      const windows = await chrome.windows.getAll({ populate: true });
+      if (windows.length > 0) {
+        const activeWindow = windows.find(w => w.focused) || windows[0];
+        await chrome.sidePanel.open({ windowId: activeWindow.id });
+      }
+    } catch (error) {
+      console.error('Error opening side panel:', error);
+    }
+  }
 
   // Set up context menus
   chrome.contextMenus.create({
@@ -33,7 +55,43 @@ chrome.runtime.onInstalled.addListener(async (details) => {
   chrome.alarms.create('daily-review', {
     periodInMinutes: 1440 // 24 hours
   });
+
+  // Inject floating indicator on all tabs after install
+  if (details.reason === 'install') {
+    injectFloatingIndicator();
+  }
 });
+
+// Handle extension icon click - open side panel
+chrome.action.onClicked.addListener(async (tab) => {
+  try {
+    const window = await chrome.windows.get(tab.windowId);
+    await chrome.sidePanel.open({ windowId: window.id });
+    sidePanelOpen = true;
+  } catch (error) {
+    console.error('Error opening side panel:', error);
+  }
+});
+
+// Inject floating indicator on all existing tabs
+async function injectFloatingIndicator() {
+  try {
+    const tabs = await chrome.tabs.query({});
+    for (const tab of tabs) {
+      // Skip chrome:// and other restricted URLs
+      if (tab.url && !tab.url.startsWith('chrome://') && !tab.url.startsWith('edge://')) {
+        try {
+          await chrome.tabs.sendMessage(tab.id, { type: 'INJECT_FLOATING_INDICATOR' });
+        } catch (error) {
+          // Tab might not be ready for messages, that's okay
+          console.debug('Could not inject indicator in tab:', tab.id);
+        }
+      }
+    }
+  } catch (error) {
+    console.error('Error injecting floating indicator:', error);
+  }
+}
 
 // Handle context menu clicks
 chrome.contextMenus.onClicked.addListener(async (info, tab) => {
@@ -106,8 +164,31 @@ async function handleMessage(message, sender, sendResponse) {
         break;
 
       case 'OPEN_SIDEPANEL':
-        await chrome.sidePanel.open({ tabId: sender.tab.id });
-        sendResponse({ success: true });
+        try {
+          const tab = sender.tab;
+          if (tab) {
+            const window = await chrome.windows.get(tab.windowId);
+            await chrome.sidePanel.open({ windowId: window.id });
+            sidePanelOpen = true;
+          }
+          sendResponse({ success: true });
+        } catch (error) {
+          sendResponse({ success: false, error: error.message });
+        }
+        break;
+
+      case 'TOGGLE_SIDEPANEL':
+        try {
+          const tab = sender.tab;
+          if (tab) {
+            const window = await chrome.windows.get(tab.windowId);
+            await chrome.sidePanel.open({ windowId: window.id });
+            sidePanelOpen = !sidePanelOpen;
+          }
+          sendResponse({ success: true, isOpen: sidePanelOpen });
+        } catch (error) {
+          sendResponse({ success: false, error: error.message });
+        }
         break;
 
       default:
@@ -348,24 +429,71 @@ chrome.alarms.onAlarm.addListener((alarm) => {
 // Handle keyboard commands
 chrome.commands.onCommand.addListener(async (command) => {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+  if (!tab) return;
 
-  switch (command) {
-    case 'quick-capture':
-      chrome.action.openPopup();
-      break;
+  try {
+    const window = await chrome.windows.get(tab.windowId);
 
-    case 'toggle-sidepanel':
-      await chrome.sidePanel.open({ tabId: tab.id });
-      break;
+    switch (command) {
+      case 'toggle-sidepanel':
+        // Toggle side panel
+        await chrome.sidePanel.open({ windowId: window.id });
+        sidePanelOpen = !sidePanelOpen;
+        break;
 
-    case 'search':
-      await chrome.sidePanel.open({ tabId: tab.id });
-      chrome.tabs.sendMessage(tab.id, { type: 'FOCUS_SEARCH' });
-      break;
+      case 'quick-capture':
+        // Open side panel and start recording
+        await chrome.sidePanel.open({ windowId: window.id });
+        // Send message to side panel to start recording
+        setTimeout(() => {
+          chrome.runtime.sendMessage({ type: 'START_RECORDING_FROM_SHORTCUT' });
+        }, 300);
+        break;
 
-    case 'command-palette':
-      chrome.tabs.sendMessage(tab.id, { type: 'OPEN_COMMAND_PALETTE' });
-      break;
+      case 'search':
+        // Open side panel and focus search
+        await chrome.sidePanel.open({ windowId: window.id });
+        setTimeout(() => {
+          chrome.runtime.sendMessage({ type: 'FOCUS_SEARCH' });
+        }, 300);
+        break;
+
+      case 'command-palette':
+        chrome.tabs.sendMessage(tab.id, { type: 'OPEN_COMMAND_PALETTE' });
+        break;
+    }
+  } catch (error) {
+    console.error('Error handling keyboard command:', error);
+  }
+});
+
+// Keep service worker alive
+let keepAliveInterval;
+
+function startKeepAlive() {
+  if (keepAliveInterval) return;
+
+  keepAliveInterval = setInterval(() => {
+    chrome.runtime.getPlatformInfo(() => {
+      // Just a ping to keep the service worker alive
+    });
+  }, 20000); // Every 20 seconds
+}
+
+function stopKeepAlive() {
+  if (keepAliveInterval) {
+    clearInterval(keepAliveInterval);
+    keepAliveInterval = null;
+  }
+}
+
+// Start keep-alive when side panel is open
+chrome.runtime.onConnect.addListener((port) => {
+  if (port.name === 'sidepanel') {
+    startKeepAlive();
+    port.onDisconnect.addListener(() => {
+      stopKeepAlive();
+    });
   }
 });
 

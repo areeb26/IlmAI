@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IlmAI - Smart Notes Panel</title>
+  <link rel="stylesheet" href="../styles/design-system.css">
+  <link rel="stylesheet" href="sidepanel-main.css">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+  <div class="sidepanel-container">
+    <!-- Sticky Header -->
+    <header class="sidepanel-header">
+      <!-- Logo and Branding -->
+      <div class="header-top">
+        <div class="logo-section">
+          <div class="logo-icon">
+            <span class="logo-text">AI</span>
+          </div>
+          <div class="logo-content">
+            <h1 class="logo-title">IlmAI</h1>
+            <p class="logo-subtitle">Smart Notes</p>
+          </div>
+        </div>
+        <div class="header-actions">
+          <button class="btn-icon" id="notificationBtn" aria-label="Notifications">
+            <i data-lucide="bell"></i>
+            <span class="notification-badge">3</span>
+          </button>
+          <button class="btn-icon" id="settingsBtn" aria-label="Settings">
+            <i data-lucide="settings"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Search Bar -->
+      <div class="header-search">
+        <div class="search-bar">
+          <i data-lucide="search" class="search-bar-icon"></i>
+          <input
+            type="search"
+            placeholder="Search notes, tags, categories..."
+            class="input search-input"
+            id="searchInput"
+            autocomplete="off"
+          />
+          <kbd class="search-shortcut">Ctrl+K</kbd>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="nav-tabs">
+        <button class="nav-tab active" data-view="dashboard">
+          <i data-lucide="layout-dashboard"></i>
+          <span>Dashboard</span>
+        </button>
+        <button class="nav-tab" data-view="notes">
+          <i data-lucide="book-open"></i>
+          <span>Notes</span>
+        </button>
+        <button class="nav-tab" data-view="record">
+          <i data-lucide="video"></i>
+          <span>Record</span>
+        </button>
+        <button class="nav-tab" data-view="ai-chat">
+          <i data-lucide="sparkles"></i>
+          <span>AI Chat</span>
+        </button>
+        <button class="nav-tab" data-view="stats">
+          <i data-lucide="bar-chart-2"></i>
+          <span>Stats</span>
+        </button>
+      </nav>
+    </header>
+
+    <!-- Main Content Area (Scrollable) -->
+    <main class="sidepanel-content">
+      <!-- Dashboard View -->
+      <div class="view-container active" id="dashboardView">
+        <!-- Quick Stats -->
+        <section class="content-section">
+          <h2 class="section-title">
+            <i data-lucide="trending-up" size="18"></i>
+            Quick Stats
+          </h2>
+          <div class="stats-grid">
+            <div class="stat-card stat-card-blue">
+              <i data-lucide="video" class="stat-icon"></i>
+              <div class="stat-content">
+                <div class="stat-value" id="totalVideos">0</div>
+                <div class="stat-label">Videos</div>
+              </div>
+              <div class="stat-trend positive">
+                <i data-lucide="trending-up" size="12"></i>
+                <span>+3</span>
+              </div>
+            </div>
+            <div class="stat-card stat-card-purple">
+              <i data-lucide="clock" class="stat-icon"></i>
+              <div class="stat-content">
+                <div class="stat-value" id="totalHours">0h</div>
+                <div class="stat-label">Total Time</div>
+              </div>
+              <div class="stat-trend positive">
+                <i data-lucide="trending-up" size="12"></i>
+                <span>+1h</span>
+              </div>
+            </div>
+            <div class="stat-card stat-card-green">
+              <i data-lucide="folder" class="stat-icon"></i>
+              <div class="stat-content">
+                <div class="stat-value" id="totalCategories">0</div>
+                <div class="stat-label">Categories</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Recent Activity -->
+        <section class="content-section">
+          <div class="section-header">
+            <h2 class="section-title">
+              <i data-lucide="clock" size="18"></i>
+              Recent Activity
+            </h2>
+            <button class="btn-text" id="viewAllActivityBtn">
+              View All
+              <i data-lucide="arrow-right" size="14"></i>
+            </button>
+          </div>
+          <div class="activity-list" id="recentActivity">
+            <!-- Activity items will be inserted here -->
+            <div class="empty-state">
+              <i data-lucide="inbox"></i>
+              <p>No recent activity</p>
+              <span>Start by recording a video!</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Quick Actions -->
+        <section class="content-section">
+          <h2 class="section-title">
+            <i data-lucide="zap" size="18"></i>
+            Quick Actions
+          </h2>
+          <div class="quick-actions-grid">
+            <button class="action-card" id="newRecordingBtn">
+              <div class="action-card-icon action-card-icon-blue">
+                <i data-lucide="video"></i>
+              </div>
+              <h3>Start Recording</h3>
+              <p>Capture current tab</p>
+            </button>
+            <button class="action-card" id="browseNotesBtn">
+              <div class="action-card-icon action-card-icon-purple">
+                <i data-lucide="book-open"></i>
+              </div>
+              <h3>Browse Notes</h3>
+              <p>View all notes</p>
+            </button>
+            <button class="action-card" id="askAIBtn">
+              <div class="action-card-icon action-card-icon-green">
+                <i data-lucide="sparkles"></i>
+              </div>
+              <h3>Ask AI</h3>
+              <p>Get instant answers</p>
+            </button>
+            <button class="action-card" id="exportBtn">
+              <div class="action-card-icon action-card-icon-orange">
+                <i data-lucide="download"></i>
+              </div>
+              <h3>Export Notes</h3>
+              <p>PDF, Markdown, etc.</p>
+            </button>
+          </div>
+        </section>
+      </div>
+
+      <!-- Notes View -->
+      <div class="view-container" id="notesView">
+        <section class="content-section">
+          <div class="section-header">
+            <h2 class="section-title">
+              <i data-lucide="book-open" size="18"></i>
+              All Notes
+            </h2>
+            <div class="notes-filters">
+              <select class="select-small" id="sortBy">
+                <option value="date">Latest</option>
+                <option value="title">Title</option>
+                <option value="duration">Duration</option>
+              </select>
+              <select class="select-small" id="filterCategory">
+                <option value="all">All Categories</option>
+              </select>
+            </div>
+          </div>
+          <div class="notes-list" id="notesList">
+            <!-- Notes will be inserted here -->
+            <div class="empty-state">
+              <i data-lucide="file-text"></i>
+              <p>No notes yet</p>
+              <span>Start recording to create your first note!</span>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Record View -->
+      <div class="view-container" id="recordView">
+        <section class="content-section">
+          <h2 class="section-title">
+            <i data-lucide="video" size="18"></i>
+            Record Video Notes
+          </h2>
+
+          <!-- Recording Interface -->
+          <div class="record-interface" id="recordInterface">
+            <div class="record-status-card">
+              <div class="record-status-icon">
+                <i data-lucide="video" size="48"></i>
+              </div>
+              <h3>Ready to Record</h3>
+              <p>Navigate to a video page and click the button below to start capturing notes.</p>
+
+              <div class="recording-settings">
+                <label class="checkbox-label">
+                  <input type="checkbox" id="autoTranscribe" checked>
+                  <span>Auto-transcribe after recording</span>
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" id="autoSummary" checked>
+                  <span>Generate AI summary</span>
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" id="autoCategorize" checked>
+                  <span>Auto-categorize content</span>
+                </label>
+              </div>
+
+              <button class="btn-record-large" id="startRecordingBtn">
+                <span class="record-icon-wrapper">
+                  <i data-lucide="video" class="record-icon"></i>
+                  <span class="record-pulse"></span>
+                </span>
+                <span>Start Recording</span>
+              </button>
+
+              <!-- Recording Active State (Hidden by default) -->
+              <div class="recording-active" id="recordingActive" style="display: none;">
+                <div class="recording-timer">
+                  <span class="recording-dot"></span>
+                  <span class="recording-time" id="recordingTime">00:00</span>
+                </div>
+                <p class="recording-status-text">Recording in progress...</p>
+                <button class="btn-stop-recording" id="stopRecordingBtn">
+                  <i data-lucide="square"></i>
+                  Stop Recording
+                </button>
+              </div>
+            </div>
+
+            <!-- Supported Platforms -->
+            <div class="supported-platforms">
+              <h4>Supported Platforms</h4>
+              <div class="platform-badges">
+                <span class="platform-badge">
+                  <i data-lucide="play-circle"></i>
+                  YouTube
+                </span>
+                <span class="platform-badge">
+                  <i data-lucide="video"></i>
+                  Vimeo
+                </span>
+                <span class="platform-badge">
+                  <i data-lucide="film"></i>
+                  Dailymotion
+                </span>
+                <span class="platform-badge">
+                  <i data-lucide="globe"></i>
+                  Custom Videos
+                </span>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- AI Chat View -->
+      <div class="view-container" id="aiChatView">
+        <section class="content-section">
+          <h2 class="section-title">
+            <i data-lucide="sparkles" size="18"></i>
+            AI Assistant
+          </h2>
+
+          <!-- Chat Interface -->
+          <div class="chat-interface">
+            <!-- Chat Messages -->
+            <div class="chat-messages" id="chatMessages">
+              <div class="chat-welcome">
+                <div class="chat-welcome-icon">
+                  <i data-lucide="sparkles" size="32"></i>
+                </div>
+                <h3>Welcome to IlmAI Assistant</h3>
+                <p>Ask me anything about your notes!</p>
+                <div class="chat-suggestions">
+                  <button class="suggestion-chip" data-prompt="Summarize my recent notes">
+                    <i data-lucide="file-text" size="14"></i>
+                    Summarize recent notes
+                  </button>
+                  <button class="suggestion-chip" data-prompt="Create flashcards from my last video">
+                    <i data-lucide="layers" size="14"></i>
+                    Create flashcards
+                  </button>
+                  <button class="suggestion-chip" data-prompt="What topics have I studied?">
+                    <i data-lucide="tag" size="14"></i>
+                    Show my topics
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Chat Input -->
+            <div class="chat-input-container">
+              <div class="chat-context-selector">
+                <select class="select-small" id="chatContext">
+                  <option value="all">All Notes</option>
+                  <option value="recent">Recent Notes</option>
+                  <option value="current">Current Note</option>
+                </select>
+              </div>
+              <div class="chat-input-wrapper">
+                <textarea
+                  id="chatInput"
+                  class="chat-input"
+                  placeholder="Ask a question about your notes..."
+                  rows="1"
+                ></textarea>
+                <button class="btn-send" id="sendChatBtn" aria-label="Send message">
+                  <i data-lucide="send"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Stats View -->
+      <div class="view-container" id="statsView">
+        <section class="content-section">
+          <h2 class="section-title">
+            <i data-lucide="bar-chart-2" size="18"></i>
+            Analytics & Statistics
+          </h2>
+
+          <!-- Overview Stats -->
+          <div class="stats-overview">
+            <div class="stat-box">
+              <div class="stat-box-header">
+                <i data-lucide="video" class="stat-box-icon"></i>
+                <span class="stat-box-label">Total Videos</span>
+              </div>
+              <div class="stat-box-value" id="statTotalVideos">0</div>
+              <div class="stat-box-change positive">
+                <i data-lucide="trending-up" size="12"></i>
+                <span>+12% from last week</span>
+              </div>
+            </div>
+
+            <div class="stat-box">
+              <div class="stat-box-header">
+                <i data-lucide="clock" class="stat-box-icon"></i>
+                <span class="stat-box-label">Watch Time</span>
+              </div>
+              <div class="stat-box-value" id="statWatchTime">0h 0m</div>
+              <div class="stat-box-change positive">
+                <i data-lucide="trending-up" size="12"></i>
+                <span>+8% from last week</span>
+              </div>
+            </div>
+
+            <div class="stat-box">
+              <div class="stat-box-header">
+                <i data-lucide="tag" class="stat-box-icon"></i>
+                <span class="stat-box-label">Categories</span>
+              </div>
+              <div class="stat-box-value" id="statCategories">0</div>
+              <div class="stat-box-change neutral">
+                <i data-lucide="minus" size="12"></i>
+                <span>No change</span>
+              </div>
+            </div>
+
+            <div class="stat-box">
+              <div class="stat-box-header">
+                <i data-lucide="award" class="stat-box-icon"></i>
+                <span class="stat-box-label">Achievements</span>
+              </div>
+              <div class="stat-box-value" id="statAchievements">0</div>
+              <div class="stat-box-change positive">
+                <i data-lucide="trending-up" size="12"></i>
+                <span>+2 new badges</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Category Breakdown -->
+          <div class="stat-section">
+            <h3 class="stat-section-title">Category Breakdown</h3>
+            <div class="category-stats" id="categoryStats">
+              <!-- Categories will be inserted here -->
+              <div class="empty-state-small">
+                <i data-lucide="folder"></i>
+                <p>No categories yet</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Learning Streak -->
+          <div class="stat-section">
+            <h3 class="stat-section-title">Learning Streak</h3>
+            <div class="streak-calendar" id="streakCalendar">
+              <!-- Calendar will be rendered here -->
+              <div class="streak-info">
+                <div class="streak-count">
+                  <span class="streak-number" id="currentStreak">0</span>
+                  <span class="streak-label">day streak</span>
+                </div>
+                <p class="streak-message">Keep learning every day!</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recent Achievements -->
+          <div class="stat-section">
+            <h3 class="stat-section-title">Recent Achievements</h3>
+            <div class="achievements-list" id="achievementsList">
+              <!-- Achievements will be inserted here -->
+              <div class="empty-state-small">
+                <i data-lucide="award"></i>
+                <p>No achievements yet</p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <!-- Floating Action Button (FAB) -->
+    <button class="fab" id="fabBtn" title="Quick Record (Ctrl+Shift+R)">
+      <i data-lucide="video"></i>
+    </button>
+
+    <!-- Footer Status Bar -->
+    <footer class="sidepanel-footer">
+      <div class="footer-status">
+        <div class="api-status">
+          <span class="status-dot" id="apiStatusDot"></span>
+          <span class="status-text" id="apiStatusText">Connecting...</span>
+        </div>
+        <button class="btn-text-small" id="syncBtn">
+          <i data-lucide="refresh-cw" size="12"></i>
+          Sync
+        </button>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // Initialize Lucide icons
+    lucide.createIcons();
+  </script>
+  <script type="module" src="sidepanel-main.js"></script>
+</body>
+</html>
