@@ -1,0 +1,117 @@
+/* Sidepanel Styles */
+
+.filter-btn {
+  @apply px-3 py-1.5 text-sm font-medium text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition whitespace-nowrap;
+}
+
+.filter-btn.active {
+  @apply bg-primary-600 text-white border-primary-600 hover:bg-primary-700;
+}
+
+.note-card {
+  @apply p-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg hover:shadow-md transition cursor-pointer;
+}
+
+.note-thumbnail {
+  @apply w-20 h-16 bg-gray-200 dark:bg-gray-700 rounded flex items-center justify-center text-2xl flex-shrink-0 overflow-hidden;
+}
+
+.note-thumbnail img {
+  @apply w-full h-full object-cover;
+}
+
+.note-title {
+  @apply text-base font-semibold text-gray-900 dark:text-white truncate;
+}
+
+.note-summary {
+  @apply text-sm text-gray-600 dark:text-gray-400 mt-1 line-clamp-2;
+}
+
+.category-badge {
+  @apply px-2 py-1 text-xs font-medium bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded;
+}
+
+.tag {
+  @apply px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded;
+}
+
+/* Modal */
+.modal {
+  @apply fixed inset-0 z-50 overflow-y-auto;
+}
+
+.modal-backdrop {
+  @apply fixed inset-0 bg-black bg-opacity-50 transition-opacity;
+}
+
+.modal-content {
+  @apply relative bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-4xl mx-auto my-8 flex flex-col max-h-[90vh];
+}
+
+.modal-header {
+  @apply flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700;
+}
+
+.modal-body {
+  @apply p-6 overflow-y-auto;
+}
+
+.transcription-content {
+  @apply space-y-3 p-4 bg-gray-50 dark:bg-gray-900 rounded-lg max-h-96 overflow-y-auto;
+}
+
+.transcript-segment {
+  @apply pb-3 border-b border-gray-200 dark:border-gray-700 last:border-0;
+}
+
+.timestamp {
+  @apply text-xs font-mono text-primary-600 dark:text-primary-400 mr-2;
+}
+
+.speaker {
+  @apply text-sm font-semibold text-secondary-600 dark:text-secondary-400 mr-2;
+}
+
+.btn-icon {
+  @apply p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition text-xl;
+}
+
+.btn-primary {
+  @apply px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition font-medium;
+}
+
+.btn-secondary {
+  @apply px-4 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-lg transition font-medium;
+}
+
+/* Animations */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* RTL Support for Urdu text */
+[dir="rtl"] {
+  text-align: right;
+}
+
+/* Scrollbar styles */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-100 dark:bg-gray-800;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 dark:bg-gray-600 rounded;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-400 dark:bg-gray-500;
+}

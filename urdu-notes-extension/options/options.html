@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IlmAI Settings</title>
+  <link href="../dist/styles.css" rel="stylesheet">
+  <link rel="stylesheet" href="options.css">
+</head>
+<body class="bg-gray-50 dark:bg-gray-900">
+  <div class="max-w-6xl mx-auto p-8">
+    <!-- Header -->
+    <header class="mb-8">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center space-x-4">
+          <img src="../assets/icons/icon128.png" alt="IlmAI" class="w-16 h-16">
+          <div>
+            <h1 class="text-3xl font-bold text-gray-900 dark:text-white">IlmAI Settings</h1>
+            <p class="text-gray-600 dark:text-gray-400">Configure your Urdu video note-taking experience</p>
+          </div>
+        </div>
+        <div class="text-sm text-gray-500 dark:text-gray-400">v1.0.0</div>
+      </div>
+    </header>
+
+    <!-- Tabs -->
+    <div class="mb-6 border-b border-gray-200 dark:border-gray-700">
+      <nav class="flex space-x-8">
+        <button class="tab-btn active" data-tab="api">🔑 API Keys</button>
+        <button class="tab-btn" data-tab="general">⚙️ General</button>
+        <button class="tab-btn" data-tab="transcription">🎙️ Transcription</button>
+        <button class="tab-btn" data-tab="ai">🤖 AI Features</button>
+        <button class="tab-btn" data-tab="appearance">🎨 Appearance</button>
+        <button class="tab-btn" data-tab="storage">💾 Storage</button>
+        <button class="tab-btn" data-tab="about">ℹ️ About</button>
+      </nav>
+    </div>
+
+    <!-- Tab Contents -->
+    <div class="tab-content">
+      <!-- API Keys Tab -->
+      <div id="api-tab" class="tab-pane active">
+        <div class="card p-6 mb-6">
+          <h2 class="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Gemini API Keys</h2>
+          <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+            Add one or more Google Gemini API keys. Multiple keys enable automatic rotation and load balancing.
+          </p>
+
+          <!-- Add API Key Form -->
+          <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg mb-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">API Key</label>
+                <input type="password" id="apiKeyInput" placeholder="AIza..." class="input">
+              </div>
+              <div>
+                <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Key Name (Optional)</label>
+                <input type="text" id="apiKeyName" placeholder="My API Key" class="input">
+              </div>
+              <div>
+                <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Model</label>
+                <select id="apiKeyModel" class="input">
+                  <option value="gemini-1.5-flash">Gemini 1.5 Flash (Recommended)</option>
+                  <option value="gemini-1.5-pro">Gemini 1.5 Pro</option>
+                  <option value="gemini-2.0-flash">Gemini 2.0 Flash</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Priority</label>
+                <input type="number" id="apiKeyPriority" value="0" min="0" class="input">
+              </div>
+            </div>
+            <button id="addApiKeyBtn" class="btn btn-primary mt-4">Add API Key</button>
+          </div>
+
+          <!-- API Keys List -->
+          <div id="apiKeysList" class="space-y-3">
+            <!-- API keys will be dynamically inserted -->
+          </div>
+
+          <!-- Get API Key Help -->
+          <div class="mt-4 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+            <h4 class="font-medium text-blue-900 dark:text-blue-200 mb-2">How to get a Gemini API Key:</h4>
+            <ol class="text-sm text-blue-800 dark:text-blue-300 space-y-1 list-decimal list-inside">
+              <li>Visit <a href="https://makersuite.google.com/app/apikey" target="_blank" class="underline">Google AI Studio</a></li>
+              <li>Sign in with your Google account</li>
+              <li>Click "Get API Key" and create a new key</li>
+              <li>Copy the key and paste it above</li>
+            </ol>
+          </div>
+        </div>
+
+        <!-- Load Balancing Strategy -->
+        <div class="card p-6">
+          <h3 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Load Balancing Strategy</h3>
+          <select id="loadBalancingStrategy" class="input">
+            <option value="round-robin">Round Robin - Rotate through all keys</option>
+            <option value="least-used">Least Used - Use the key with lowest usage</option>
+            <option value="health-weighted">Health Weighted - Prefer healthier keys</option>
+            <option value="priority">Priority Based - Use highest priority key</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- General Tab -->
+      <div id="general-tab" class="tab-pane hidden">
+        <div class="card p-6 space-y-6">
+          <div>
+            <h3 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Language Preferences</h3>
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Default Language</label>
+                <select id="defaultLanguage" class="input">
+                  <option value="ur">Urdu (اردو)</option>
+                  <option value="en">English</option>
+                  <option value="ar">Arabic (العربية)</option>
+                  <option value="mixed">Mixed (Auto-detect)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Notifications</h3>
+            <div class="space-y-3">
+              <label class="flex items-center">
+                <input type="checkbox" id="notifTranscription" class="checkbox" checked>
+                <span class="ml-3 text-gray-700 dark:text-gray-300">Transcription completed</span>
+              </label>
+              <label class="flex items-center">
+                <input type="checkbox" id="notifDailyReview" class="checkbox" checked>
+                <span class="ml-3 text-gray-700 dark:text-gray-300">Daily review reminders</span>
+              </label>
+              <label class="flex items-center">
+                <input type="checkbox" id="notifApiIssues" class="checkbox" checked>
+                <span class="ml-3 text-gray-700 dark:text-gray-300">API key issues</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Transcription Tab -->
+      <div id="transcription-tab" class="tab-pane hidden">
+        <div class="card p-6 space-y-6">
+          <div>
+            <h3 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Transcription Quality</h3>
+            <select id="transcriptionQuality" class="input">
+              <option value="fast">Fast - Quick transcription, lower accuracy</option>
+              <option value="balanced" selected>Balanced - Good speed and accuracy</option>
+              <option value="accurate">Accurate - Slower but more precise</option>
+            </select>
+          </div>
+
+          <div>
+            <h3 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Advanced Options</h3>
+            <div class="space-y-3">
+              <label class="flex items-center">
+                <input type="checkbox" id="speakerDiarization" class="checkbox" checked>
+                <span class="ml-3 text-gray-700 dark:text-gray-300">Speaker diarization (identify different speakers)</span>
+              </label>
+              <label class="flex items-center">
+                <input type="checkbox" id="timestamps" class="checkbox" checked>
+                <span class="ml-3 text-gray-700 dark:text-gray-300">Include timestamps</span>
+              </label>
+              <label class="flex items-center">
+                <input type="checkbox" id="autoCategorize" class="checkbox" checked>
+                <span class="ml-3 text-gray-700 dark:text-gray-300">Auto-categorize content</span>
+              </label>
+              <label class="flex items-center">
+                <input type="checkbox" id="autoSummary" class="checkbox" checked>
+                <span class="ml-3 text-gray-700 dark:text-gray-300">Auto-generate summary</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI Features Tab -->
+      <div id="ai-tab" class="tab-pane hidden">
+        <div class="card p-6 space-y-6">
+          <div>
+            <h3 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Summary Preferences</h3>
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Default Summary Length</label>
+                <select id="summaryLength" class="input">
+                  <option value="oneline">One-line (Brief)</option>
+                  <option value="medium" selected>Medium (2-3 paragraphs)</option>
+                  <option value="detailed">Detailed (Full summary)</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">AI Temperature (Creativity)</label>
+                <input type="range" id="aiTemperature" min="0" max="1" step="0.1" value="0.7" class="w-full">
+                <div class="flex justify-between text-xs text-gray-500 mt-1">
+                  <span>Precise</span>
+                  <span id="temperatureValue">0.7</span>
+                  <span>Creative</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Content Generation</h3>
+            <div class="space-y-3">
+              <label class="flex items-center">
+                <input type="checkbox" id="autoFlashcards" class="checkbox">
+                <span class="ml-3 text-gray-700 dark:text-gray-300">Auto-generate flashcards</span>
+              </label>
+              <label class="flex items-center">
+                <input type="checkbox" id="autoKeyPoints" class="checkbox" checked>
+                <span class="ml-3 text-gray-700 dark:text-gray-300">Extract key points automatically</span>
+              </label>
+              <label class="flex items-center">
+                <input type="checkbox" id="autoEntities" class="checkbox" checked>
+                <span class="ml-3 text-gray-700 dark:text-gray-300">Extract entities (names, dates, verses)</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Appearance Tab -->
+      <div id="appearance-tab" class="tab-pane hidden">
+        <div class="card p-6 space-y-6">
+          <div>
+            <h3 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Theme</h3>
+            <select id="themeSelect" class="input">
+              <option value="auto">Auto (Follow system)</option>
+              <option value="light">Light</option>
+              <option value="dark">Dark</option>
+            </select>
+          </div>
+
+          <div>
+            <h3 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">UI Density</h3>
+            <select id="uiDensity" class="input">
+              <option value="compact">Compact</option>
+              <option value="comfortable" selected>Comfortable</option>
+              <option value="spacious">Spacious</option>
+            </select>
+          </div>
+
+          <div>
+            <h3 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Font Size</h3>
+            <select id="fontSize" class="input">
+              <option value="small">Small</option>
+              <option value="medium" selected>Medium</option>
+              <option value="large">Large</option>
+              <option value="xlarge">Extra Large</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Storage Tab -->
+      <div id="storage-tab" class="tab-pane hidden">
+        <div class="card p-6 space-y-6">
+          <div>
+            <h3 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Storage Usage</h3>
+            <div id="storageInfo" class="space-y-2">
+              <div class="flex justify-between text-sm">
+                <span class="text-gray-600 dark:text-gray-400">Notes:</span>
+                <span class="font-medium text-gray-900 dark:text-white" id="notesCount">0</span>
+              </div>
+              <div class="flex justify-between text-sm">
+                <span class="text-gray-600 dark:text-gray-400">Storage Used:</span>
+                <span class="font-medium text-gray-900 dark:text-white" id="storageUsed">0 MB</span>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Data Management</h3>
+            <div class="space-y-3">
+              <button id="exportAllBtn" class="btn btn-secondary w-full">📥 Export All Data</button>
+              <button id="importDataBtn" class="btn btn-secondary w-full">📤 Import Data</button>
+              <button id="clearCacheBtn" class="btn btn-secondary w-full">🗑️ Clear Cache</button>
+              <button id="deleteAllBtn" class="btn btn-danger w-full">⚠️ Delete All Data</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- About Tab -->
+      <div id="about-tab" class="tab-pane hidden">
+        <div class="card p-6">
+          <div class="text-center mb-6">
+            <img src="../assets/icons/icon128.png" alt="IlmAI" class="w-24 h-24 mx-auto mb-4">
+            <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">IlmAI</h2>
+            <p class="text-gray-600 dark:text-gray-400">AI-Powered Urdu Video Note-Taking</p>
+            <p class="text-sm text-gray-500 dark:text-gray-500 mt-2">Version 1.0.0</p>
+          </div>
+
+          <div class="space-y-4 text-sm">
+            <div>
+              <h4 class="font-semibold text-gray-900 dark:text-white mb-2">Features:</h4>
+              <ul class="list-disc list-inside space-y-1 text-gray-600 dark:text-gray-400">
+                <li>Audio capture and Urdu transcription</li>
+                <li>AI-powered categorization and summaries</li>
+                <li>NotebookLM-style Q&A</li>
+                <li>Flashcard and quiz generation</li>
+                <li>Multiple export formats</li>
+                <li>Advanced search and organization</li>
+              </ul>
+            </div>
+
+            <div>
+              <h4 class="font-semibold text-gray-900 dark:text-white mb-2">Links:</h4>
+              <div class="space-y-2">
+                <a href="https://github.com/ilmai/urdu-notes-extension" target="_blank" class="block text-primary-600 hover:underline">GitHub Repository</a>
+                <a href="https://github.com/ilmai/urdu-notes-extension/issues" target="_blank" class="block text-primary-600 hover:underline">Report an Issue</a>
+                <a href="https://github.com/ilmai/urdu-notes-extension/blob/main/README.md" target="_blank" class="block text-primary-600 hover:underline">Documentation</a>
+              </div>
+            </div>
+
+            <div class="pt-4 border-t border-gray-200 dark:border-gray-700">
+              <p class="text-gray-600 dark:text-gray-400">
+                Made with ❤️ for the Urdu learning community
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Save Button (sticky) -->
+    <div class="sticky bottom-0 bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 p-4 -mx-8 -mb-8 mt-8">
+      <div class="max-w-6xl mx-auto flex items-center justify-between">
+        <div id="saveStatus" class="text-sm text-gray-600 dark:text-gray-400"></div>
+        <button id="saveSettingsBtn" class="btn btn-primary">Save Settings</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="options.js"></script>
+</body>
+</html>
