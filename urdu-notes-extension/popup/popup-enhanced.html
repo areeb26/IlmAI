@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IlmAI - Quick Actions</title>
+  <link rel="stylesheet" href="../styles/design-system.css">
+  <link rel="stylesheet" href="popup-enhanced.css">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+  <div class="popup-container">
+    <!-- Header with Gradient -->
+    <header class="popup-header">
+      <div class="logo-section">
+        <div class="logo-icon">
+          <span class="logo-text">AI</span>
+        </div>
+        <div class="logo-content">
+          <h1 class="logo-title">IlmAI</h1>
+          <p class="logo-subtitle">Smart Notes</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="btn-icon" id="notificationBtn" aria-label="Notifications">
+          <i data-lucide="bell"></i>
+          <span class="notification-badge">3</span>
+        </button>
+        <button class="btn-icon" id="settingsBtn" aria-label="Settings">
+          <i data-lucide="settings"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- Search Bar -->
+    <div class="search-section">
+      <div class="search-bar">
+        <i data-lucide="search" class="search-bar-icon"></i>
+        <input
+          type="search"
+          placeholder="Search notes, tags, categories..."
+          class="input"
+          id="searchInput"
+          autocomplete="off"
+        />
+      </div>
+    </div>
+
+    <!-- Primary CTA -->
+    <div class="cta-section">
+      <button class="btn-record" id="recordBtn">
+        <span class="record-icon-wrapper">
+          <i data-lucide="video" class="record-icon"></i>
+          <span class="record-pulse"></span>
+        </span>
+        <div class="record-content">
+          <span class="record-title">Start Recording</span>
+          <span class="record-subtitle">Capture & transcribe video</span>
+        </div>
+        <i data-lucide="chevron-right" class="record-arrow"></i>
+      </button>
+    </div>
+
+    <!-- Quick Stats -->
+    <section class="stats-section">
+      <h2 class="section-title">
+        <i data-lucide="bar-chart-2" size="16"></i>
+        Quick Stats
+      </h2>
+      <div class="stats-grid">
+        <div class="stat-card stat-card-blue">
+          <i data-lucide="video" class="stat-icon"></i>
+          <div class="stat-content">
+            <div class="stat-value" id="totalVideos">12</div>
+            <div class="stat-label">Videos</div>
+          </div>
+          <div class="stat-trend">
+            <i data-lucide="trending-up" size="12"></i>
+            <span>+3</span>
+          </div>
+        </div>
+
+        <div class="stat-card stat-card-purple">
+          <i data-lucide="clock" class="stat-icon"></i>
+          <div class="stat-content">
+            <div class="stat-value" id="totalHours">8h 23m</div>
+            <div class="stat-label">Total Time</div>
+          </div>
+          <div class="stat-trend">
+            <i data-lucide="trending-up" size="12"></i>
+            <span>+1h</span>
+          </div>
+        </div>
+
+        <div class="stat-card stat-card-green">
+          <i data-lucide="folder" class="stat-icon"></i>
+          <div class="stat-content">
+            <div class="stat-value" id="totalCategories">5</div>
+            <div class="stat-label">Categories</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Recent Notes -->
+    <section class="recent-section">
+      <div class="section-header">
+        <h2 class="section-title">
+          <i data-lucide="file-text" size="16"></i>
+          Recent Notes
+        </h2>
+        <button class="btn-text" id="viewAllBtn">
+          View All
+          <i data-lucide="arrow-right" size="14"></i>
+        </button>
+      </div>
+
+      <div class="notes-list" id="recentNotes">
+        <!-- Note Item 1 -->
+        <div class="note-item animate-fade-in-up">
+          <div class="note-thumbnail">
+            <div class="note-thumbnail-placeholder">
+              <i data-lucide="play-circle"></i>
+            </div>
+            <div class="note-duration">15:32</div>
+          </div>
+          <div class="note-details">
+            <h3 class="note-title">Introduction to Islamic History</h3>
+            <div class="note-meta">
+              <span class="note-category">
+                <i data-lucide="tag" size="12"></i>
+                Islamic Studies
+              </span>
+              <span class="note-time">
+                <i data-lucide="clock" size="12"></i>
+                2 hours ago
+              </span>
+            </div>
+            <div class="note-tags">
+              <span class="tag-chip">History</span>
+              <span class="tag-chip">Arabic</span>
+            </div>
+          </div>
+          <button class="btn-icon-small note-action" aria-label="More options">
+            <i data-lucide="more-vertical" size="16"></i>
+          </button>
+        </div>
+
+        <!-- Note Item 2 -->
+        <div class="note-item animate-fade-in-up" style="animation-delay: 0.1s">
+          <div class="note-thumbnail">
+            <div class="note-thumbnail-placeholder note-thumbnail-purple">
+              <i data-lucide="book-open"></i>
+            </div>
+            <div class="note-duration">23:45</div>
+          </div>
+          <div class="note-details">
+            <h3 class="note-title">Urdu Grammar Fundamentals</h3>
+            <div class="note-meta">
+              <span class="note-category">
+                <i data-lucide="tag" size="12"></i>
+                Language
+              </span>
+              <span class="note-time">
+                <i data-lucide="clock" size="12"></i>
+                Yesterday
+              </span>
+            </div>
+            <div class="note-tags">
+              <span class="tag-chip">Urdu</span>
+              <span class="tag-chip">Grammar</span>
+            </div>
+          </div>
+          <button class="btn-icon-small note-action" aria-label="More options">
+            <i data-lucide="more-vertical" size="16"></i>
+          </button>
+        </div>
+
+        <!-- Note Item 3 -->
+        <div class="note-item animate-fade-in-up" style="animation-delay: 0.2s">
+          <div class="note-thumbnail">
+            <div class="note-thumbnail-placeholder note-thumbnail-green">
+              <i data-lucide="microscope"></i>
+            </div>
+            <div class="note-duration">18:20</div>
+          </div>
+          <div class="note-details">
+            <h3 class="note-title">Scientific Method in Research</h3>
+            <div class="note-meta">
+              <span class="note-category">
+                <i data-lucide="tag" size="12"></i>
+                Science
+              </span>
+              <span class="note-time">
+                <i data-lucide="clock" size="12"></i>
+                2 days ago
+              </span>
+            </div>
+            <div class="note-tags">
+              <span class="tag-chip">Research</span>
+            </div>
+          </div>
+          <button class="btn-icon-small note-action" aria-label="More options">
+            <i data-lucide="more-vertical" size="16"></i>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quick Actions -->
+    <section class="quick-actions">
+      <button class="action-button" id="openSidepanelBtn">
+        <i data-lucide="layout-panel-left"></i>
+        <span>Open Notes Panel</span>
+      </button>
+      <button class="action-button" id="aiAssistantBtn">
+        <i data-lucide="sparkles"></i>
+        <span>AI Assistant</span>
+      </button>
+    </section>
+
+    <!-- Footer -->
+    <footer class="popup-footer">
+      <div class="footer-left">
+        <span class="version-badge">v1.0.0</span>
+        <a href="#" class="footer-link" id="helpLink">
+          <i data-lucide="help-circle" size="12"></i>
+          Help
+        </a>
+      </div>
+      <div class="footer-right">
+        <div class="api-status">
+          <span class="status-dot status-dot-active"></span>
+          <span class="status-text">API Active</span>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // Initialize Lucide icons
+    lucide.createIcons();
+  </script>
+  <script type="module" src="popup-enhanced.js"></script>
+</body>
+</html>
