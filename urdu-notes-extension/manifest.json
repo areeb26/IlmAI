@@ -23,7 +23,8 @@
     "contextMenus",
     "webNavigation",
     "alarms",
-    "identity"
+    "identity",
+    "sidePanel"
   ],
 
   "host_permissions": [
@@ -37,7 +38,6 @@
   },
 
   "action": {
-    "default_popup": "popup/popup.html",
     "default_icon": {
       "16": "assets/icons/icon16.png",
       "32": "assets/icons/icon32.png",
@@ -48,7 +48,7 @@
   },
 
   "side_panel": {
-    "default_path": "sidepanel/sidepanel.html"
+    "default_path": "sidepanel/sidepanel-main.html"
   },
 
   "options_page": "options/options.html",
